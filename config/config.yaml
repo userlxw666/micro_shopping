@@ -1,0 +1,6 @@
+mysql:
+  Username: root
+  Password: 10121125
+  Host: 127.0.0.1
+  Port: 3306
+  DatabaseName: micro_shopping
