@@ -4,3 +4,7 @@ mysql:
   Host: 127.0.0.1
   Port: 3306
   DatabaseName: micro_shopping
+
+UserService:
+  Host: 127.0.0.1
+  Port: 50001
