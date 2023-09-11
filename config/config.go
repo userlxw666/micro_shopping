@@ -6,7 +6,8 @@ import (
 )
 
 type ConfigFile struct {
-	Mysql
+	Mysql       Mysql
+	UserService UserService
 }
 
 type Mysql struct {
@@ -15,6 +16,11 @@ type Mysql struct {
 	Host         string
 	Port         string
 	DatabaseName string
+}
+
+type UserService struct {
+	Host string
+	Port int
 }
 
 var RdConfigFile *ConfigFile
