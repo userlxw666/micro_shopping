@@ -6,8 +6,9 @@ import (
 )
 
 type ConfigFile struct {
-	Mysql       Mysql
-	UserService UserService
+	Mysql           Mysql
+	UserService     UserService
+	CategoryService CategoryService
 }
 
 type Mysql struct {
@@ -19,6 +20,11 @@ type Mysql struct {
 }
 
 type UserService struct {
+	Host string
+	Port int
+}
+
+type CategoryService struct {
 	Host string
 	Port int
 }

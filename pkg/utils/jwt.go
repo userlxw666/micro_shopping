@@ -8,17 +8,17 @@ import (
 )
 
 type MyClaims struct {
-	UserName string
-	Password string
+	UserName string `json:"user_name"`
+	UserID   uint   `json:"user_id"`
 	jwt.StandardClaims
 }
 
 var MySecret = "microShopping"
 
-func CreateToken(username, password string) (string, error) {
+func CreateToken(username string, userid uint) (string, error) {
 	c := MyClaims{
 		UserName: username,
-		Password: password,
+		UserID:   userid,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(2 * time.Hour).Unix(),
 			Issuer:    "lxw",
@@ -34,18 +34,18 @@ func CreateToken(username, password string) (string, error) {
 	return tokenString, nil
 }
 
-func ParseToken(tokenString string) *MyClaims {
+func ParseToken(tokenString string, Secret string) (*MyClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &MyClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return MySecret, nil
+		return []byte(Secret), nil
 	})
 	if err != nil {
-		fmt.Println("parse token error", err)
-		return nil
+		fmt.Println("parse token error:", err)
+		return nil, err
 	}
 	if myClaim, ok := token.Claims.(*MyClaims); ok && token.Valid {
-		return myClaim
+		return myClaim, err
 	} else {
 		fmt.Println("断言失败", errors.New("断言失败"))
-		return nil
+		return nil, errors.New("断言失败")
 	}
 }

@@ -1,0 +1,42 @@
+syntax="proto3";
+package pb;
+option go_package="./;pb";
+
+message CategoryRequest {
+  // @inject_tag: json:"name" form:"name"
+  string Name = 1;
+  // @inject_tag: json:"desc" form:"desc"
+  string Desc = 2;
+}
+
+message CategoryResponse {
+  // @inject_tag: json:"name" form:"name"
+  string Name = 1;
+  // @inject_tag: json:"desc" form:"desc"
+  string Desc = 2;
+}
+
+message BulkRequest {
+  repeated CategoryRequest  BulkRequest = 1;
+}
+
+message BulkResponse {
+  repeated CategoryResponse BulkResponse = 1;
+}
+
+message Page {
+  // @inject_tag: json:"page" form:"page"
+  int64 Page = 1;
+  // @inject_tag: json:"page_size" form:"page_size"
+  int64 PageSize = 2;
+  // @inject_tag: json:"page_count" form:"page_size"
+  int64 PageCount = 3;
+  // @inject_tag: json:"total" form:"total"
+  int64 Total = 4;
+}
+
+service CategoryService {
+  rpc CreateCategory(CategoryRequest) returns (CategoryResponse) {}
+  rpc BulkCreateCategory(BulkRequest) returns (BulkResponse) {}
+  rpc GetCategories(Page) returns (BulkResponse) {}
+}

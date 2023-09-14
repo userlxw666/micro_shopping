@@ -1,0 +1,39 @@
+syntax="proto3";
+package pb;
+option go_package="./;pb";
+
+service ProductService {
+  rpc GetProducts(Page) returns (BulkProductResponse) {}
+}
+
+message Page {
+  // @inject_tag: json:"page" form:"page"
+  int64 Page = 1;
+  // @inject_tag: json:"page_size" form:"page_size"
+  int64 PageSize = 2;
+  // @inject_tag: json:"page_count" form:"page_size"
+  int64 PageCount = 3;
+  // @inject_tag: json:"total" form:"total"
+  int64 Total = 4;
+}
+
+message ProductResponse {
+
+}
+
+message Product {
+  // @inject_tag: json:"name" form:"name"
+  string Name = 1;
+  // @inject_tag: json:"desc" form:"desc"
+  string Desc = 2;
+  // @inject_tag: json:"price" form:"price"
+  float Price = 3;
+  // @inject_tag: json:"count" form:"count"
+  int64 Count = 4;
+  // @inject_tag: json:"category_id" form:"category_id"
+  uint64 CategoryID = 5;
+}
+
+message BulkProductResponse {
+  repeated Product ProductResp= 1;
+}

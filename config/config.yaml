@@ -8,3 +8,7 @@ mysql:
 UserService:
   Host: 127.0.0.1
   Port: 50001
+
+CategoryService:
+  Host: 127.0.0.1
+  Port: 50002

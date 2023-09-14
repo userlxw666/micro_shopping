@@ -22,7 +22,10 @@ func GetGrpcConn(ServiceName string, ServiceTags string, consulClient *api.Clien
 	return grpcConn
 }
 
-var UserService pb.UserServiceClient
+var (
+	UserService     pb.UserServiceClient
+	CategoryService pb.CategoryServiceClient
+)
 
 func InitRPC() {
 	consulConfig := api.DefaultConfig()
@@ -32,4 +35,5 @@ func InitRPC() {
 		return
 	}
 	UserService = pb.NewUserServiceClient(GetGrpcConn("UserService", "UserService", consulClient))
+	CategoryService = pb.NewCategoryServiceClient(GetGrpcConn("CategoryService", "CategoryService", consulClient))
 }
