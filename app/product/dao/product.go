@@ -20,33 +20,33 @@ func NewProductDao(ctx context.Context) *ProductDao {
 
 // 创建商品
 func (p *ProductDao) CreateProduct(product *model.Product) error {
-	result := p.Create(p)
+	result := p.Create(&product)
 	return result.Error
 }
 
 // 更新
 func (p *ProductDao) UpdateProduct(product *model.Product) error {
-	return p.Save(&product).Error
+	pd := p.SearchBySKU(product.SKU)
+	return p.Model(&pd).Updates(product).Error
 }
 
 // 通过关键字寻找商品
-func (p *ProductDao) SearchByString(str string, pageIndex, pageSize int) ([]model.Product, int) {
+func (p *ProductDao) SearchByString(str string, pageIndex, pageSize int) ([]model.Product, error) {
 	var products []model.Product
-	var count int64
 	converStr := "%" + str + "%"
 	err := p.Where("name like ? or sku like ?", converStr, converStr).Where(
-		"IsDeleted=?", false).Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&products).Count(&count).Error
+		"is_deleted=?", false).Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&products).Error
 	if err != nil {
 		fmt.Println("search error", err)
-		return nil, 0
+		return nil, err
 	}
-	return products, int(count)
+	return products, err
 }
 
 // 通过sku寻找商品
 func (p *ProductDao) SearchBySKU(sku string) *model.Product {
 	var product model.Product
-	err := p.Where("IsDeleted=?", false).Where(model.Product{SKU: sku}).First(&product).Error
+	err := p.Where("is_deleted=?", false).Where(model.Product{SKU: sku}).First(&product).Error
 	if err != nil {
 		fmt.Println("search product bu sku error", err)
 		return nil
@@ -55,15 +55,14 @@ func (p *ProductDao) SearchBySKU(sku string) *model.Product {
 }
 
 // 查询所有商品
-func (p *ProductDao) GetAll(page, pageSize int) ([]model.Product, int) {
+func (p *ProductDao) GetAll(page, pageSize int) ([]model.Product, error) {
 	var products []model.Product
-	var count int64
-	err := p.Offset((page - 1) * pageSize).Limit(pageSize).Find(&products).Count(&count)
+	err := p.Offset((page - 1) * pageSize).Limit(pageSize).Find(&products).Error
 	if err != nil {
 		fmt.Println("获取所有商品失败", err)
-		return nil, 0
+		return nil, err
 	}
-	return products, int(count)
+	return products, nil
 }
 
 // 删除商品

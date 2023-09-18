@@ -33,3 +33,8 @@ func (p *Product) CreateUUID() {
 	Uuid := uuid.New().String()
 	p.SKU = Uuid
 }
+
+func (p *Product) BeforeCreate(tx *gorm.DB) (err error) {
+	p.CreateUUID()
+	return err
+}
