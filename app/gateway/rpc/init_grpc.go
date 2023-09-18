@@ -25,6 +25,8 @@ func GetGrpcConn(ServiceName string, ServiceTags string, consulClient *api.Clien
 var (
 	UserService     pb.UserServiceClient
 	CategoryService pb.CategoryServiceClient
+	ProductService  pb.ProductServiceClient
+	CartService     pb.CartServiceClient
 )
 
 func InitRPC() {
@@ -36,4 +38,6 @@ func InitRPC() {
 	}
 	UserService = pb.NewUserServiceClient(GetGrpcConn("UserService", "UserService", consulClient))
 	CategoryService = pb.NewCategoryServiceClient(GetGrpcConn("CategoryService", "CategoryService", consulClient))
+	ProductService = pb.NewProductServiceClient(GetGrpcConn("ProductService", "ProductService", consulClient))
+	CartService = pb.NewCartServiceClient(GetGrpcConn("CartService", "CartService", consulClient))
 }

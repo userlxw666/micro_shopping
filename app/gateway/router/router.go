@@ -17,10 +17,23 @@ func NewRouter() {
 	categoryGroup := ginRouter.Group("/category")
 	categoryGroup.Use(middleware.MiddleJWT)
 	{
-		categoryGroup.GET("/ping", controller.TestPing)
 		categoryGroup.POST("/create", controller.CreateCategory)
 		categoryGroup.GET("/get", controller.GetCategories)
-		categoryGroup.GET("/bulkcreate", controller.BulkCreateCategory)
+	}
+	productGroup := ginRouter.Group("/product")
+	productGroup.Use(middleware.MiddleJWT)
+	{
+		productGroup.POST("/create", controller.CreateProduct)
+		productGroup.GET("/get", controller.GetProducts)
+		productGroup.POST("/update", controller.UpdateProduct)
+		productGroup.POST("/delete", controller.DeleteProduct)
+	}
+	cartGroup := ginRouter.Group("/cart")
+	cartGroup.Use(middleware.MiddleJWT)
+	{
+		cartGroup.GET("/get", controller.GetCart)
+		cartGroup.POST("/create", controller.AddItem)
+		cartGroup.POST("/update", controller.UpdateItem)
 	}
 	ginRouter.Run()
 }

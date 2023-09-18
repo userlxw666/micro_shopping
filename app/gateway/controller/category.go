@@ -2,7 +2,6 @@ package controller
 
 import (
 	"errors"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"micro_shopping/app/gateway/rpc"
 	"micro_shopping/idl/pb"
@@ -14,7 +13,7 @@ import (
 func CreateCategory(c *gin.Context) {
 	var req pb.CategoryRequest
 	if err := c.ShouldBind(&req); err != nil {
-		fmt.Println("结构体绑定失败", err)
+		api_helper.HandleError(c, errors.New("结构体绑定失败"))
 		return
 	}
 
@@ -50,8 +49,9 @@ func BulkCreateCategory(c *gin.Context) {
 
 func GetCategories(c *gin.Context) {
 	page := utils.NewFromGinRequest(c, -1)
+	categoryPage := utils.NewCategoryPages(page)
 	// grpc调用
-	resp, err := rpc.GetCategories(c, page)
+	resp, err := rpc.GetCategories(c, categoryPage)
 	if err != nil {
 		api_helper.HandleError(c, errors.New("category rpc 调用失败"))
 	}
