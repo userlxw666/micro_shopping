@@ -7,7 +7,6 @@ import (
 	"micro_shopping/app/user/dao/model"
 	"micro_shopping/idl/pb"
 	"micro_shopping/pkg/utils"
-	"time"
 )
 
 type UserService struct {
@@ -63,31 +62,9 @@ func (usv *UserService) UserLogin(ctx context.Context, req *pb.UserRequest) (res
 		res.Code = 400
 		return res, err
 	}
-	//判断是否存在token
-	if user.Token == "" {
-		tokenString, err := utils.CreateToken(req.UserName, user.ID)
-		if err != nil {
-			fmt.Println("create token error", err)
-			res.Code = 500
-			return res, err
-		}
-		user.Token = tokenString
-		err = daoUser.UpdateUser(user)
-		if err != nil {
-			fmt.Println("update user error", err)
-			res.Code = 500
-			return res, err
-		}
-	}
 	// get claims
-	claims, err := utils.ParseToken(user.Token, utils.MySecret)
-	if err != nil {
-		fmt.Println("parse token error", err)
-		return nil, err
-	}
-	// 判断token是否过期
-	if time.Now().Unix() > claims.ExpiresAt {
-		// 过期则更新数据库中的token
+	claims := utils.ParseToken(user.Token, utils.MySecret)
+	if claims == nil {
 		user.Token, _ = utils.CreateToken(req.UserName, user.ID)
 		err = daoUser.UpdateUser(user)
 		if err != nil {
@@ -96,7 +73,6 @@ func (usv *UserService) UserLogin(ctx context.Context, req *pb.UserRequest) (res
 			return res, nil
 		}
 	}
-
 	res.Code = 200
 	res.UserDetail = BuildUserModel(user)
 	return res, nil
