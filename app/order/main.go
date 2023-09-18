@@ -38,7 +38,7 @@ func main() {
 
 	grpcService := grpc.NewServer()
 
-	pb.RegisterCartServiceServer(grpcService, new(server.ProductService))
+	pb.RegisterOrderServiceServer(grpcService, new(server.OrderService))
 
 	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%s", config.RdConfigFile.ProductService.Host,
 		strconv.Itoa(config.RdConfigFile.ProductService.Port)))
