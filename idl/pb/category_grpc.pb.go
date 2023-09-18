@@ -19,9 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	CategoryService_CreateCategory_FullMethodName     = "/pb.CategoryService/CreateCategory"
-	CategoryService_BulkCreateCategory_FullMethodName = "/pb.CategoryService/BulkCreateCategory"
-	CategoryService_GetCategories_FullMethodName      = "/pb.CategoryService/GetCategories"
+	CategoryService_CreateCategory_FullMethodName = "/pb.CategoryService/CreateCategory"
+	CategoryService_GetCategories_FullMethodName  = "/pb.CategoryService/GetCategories"
 )
 
 // CategoryServiceClient is the client API for CategoryService service.
@@ -29,7 +28,6 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CategoryServiceClient interface {
 	CreateCategory(ctx context.Context, in *CategoryRequest, opts ...grpc.CallOption) (*CategoryResponse, error)
-	BulkCreateCategory(ctx context.Context, in *BulkRequest, opts ...grpc.CallOption) (*BulkResponse, error)
 	GetCategories(ctx context.Context, in *Page, opts ...grpc.CallOption) (*BulkResponse, error)
 }
 
@@ -50,15 +48,6 @@ func (c *categoryServiceClient) CreateCategory(ctx context.Context, in *Category
 	return out, nil
 }
 
-func (c *categoryServiceClient) BulkCreateCategory(ctx context.Context, in *BulkRequest, opts ...grpc.CallOption) (*BulkResponse, error) {
-	out := new(BulkResponse)
-	err := c.cc.Invoke(ctx, CategoryService_BulkCreateCategory_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *categoryServiceClient) GetCategories(ctx context.Context, in *Page, opts ...grpc.CallOption) (*BulkResponse, error) {
 	out := new(BulkResponse)
 	err := c.cc.Invoke(ctx, CategoryService_GetCategories_FullMethodName, in, out, opts...)
@@ -73,7 +62,6 @@ func (c *categoryServiceClient) GetCategories(ctx context.Context, in *Page, opt
 // for forward compatibility
 type CategoryServiceServer interface {
 	CreateCategory(context.Context, *CategoryRequest) (*CategoryResponse, error)
-	BulkCreateCategory(context.Context, *BulkRequest) (*BulkResponse, error)
 	GetCategories(context.Context, *Page) (*BulkResponse, error)
 }
 
@@ -83,9 +71,6 @@ type UnimplementedCategoryServiceServer struct {
 
 func (UnimplementedCategoryServiceServer) CreateCategory(context.Context, *CategoryRequest) (*CategoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCategory not implemented")
-}
-func (UnimplementedCategoryServiceServer) BulkCreateCategory(context.Context, *BulkRequest) (*BulkResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BulkCreateCategory not implemented")
 }
 func (UnimplementedCategoryServiceServer) GetCategories(context.Context, *Page) (*BulkResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCategories not implemented")
@@ -120,24 +105,6 @@ func _CategoryService_CreateCategory_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CategoryService_BulkCreateCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BulkRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CategoryServiceServer).BulkCreateCategory(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: CategoryService_BulkCreateCategory_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CategoryServiceServer).BulkCreateCategory(ctx, req.(*BulkRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _CategoryService_GetCategories_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Page)
 	if err := dec(in); err != nil {
@@ -166,10 +133,6 @@ var CategoryService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateCategory",
 			Handler:    _CategoryService_CreateCategory_Handler,
-		},
-		{
-			MethodName: "BulkCreateCategory",
-			Handler:    _CategoryService_BulkCreateCategory_Handler,
 		},
 		{
 			MethodName: "GetCategories",

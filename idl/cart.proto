@@ -1,0 +1,48 @@
+syntax="proto3";
+package pb;
+option go_package="./;pb";
+
+service CartService {
+  rpc AddItem(AddItemRequest) returns (cartEmpty) {}
+  rpc UpdateItem(UpdateItemRequest) returns (cartEmpty) {}
+  rpc GetCart(GetCartRequest) returns (GetCartResponse) {}
+}
+
+message AddItemRequest {
+  // @inject_tag: json:"sku" form:"sku"
+  string Sku = 1;
+  // @inject_tag: json:"count" form:"count"
+  int64 Count = 2;
+  // @inject_tag: json:"user_id" form:"user_id"
+  uint64 UserID = 3;
+}
+
+message UpdateItemRequest {
+  // @inject_tag: json:"sku" form:"sku"
+  string Sku = 1;
+  // @inject_tag: json:"count" form:"count"
+  int64 Count = 2;
+  // @inject_tag: json:"user_id" form:"user_id"
+  uint64 UserID = 3;
+}
+
+message GetCartRequest {
+  // @inject_tag: json:"user_id" form:"user_id"
+  uint64 UserID = 1;
+}
+
+message CartItem {
+  // @inject_tag: json:"product_id" form:"product_id"
+  uint64 ProductID = 1;
+  // @inject_tag: json:"count" form:"count"
+  int64 Count = 2;
+}
+
+message GetCartResponse {
+  // @inject_tag: json:"user_id" form:"user_id"
+  int64 UserID = 1;
+  // @inject_tag: json:"items" form:"items"
+  repeated CartItem Items = 2;
+}
+
+message cartEmpty{}

@@ -3,37 +3,84 @@ package pb;
 option go_package="./;pb";
 
 service ProductService {
-  rpc GetProducts(Page) returns (BulkProductResponse) {}
+  // 获取当前页面所有商品
+  rpc GetProducts(GetProductReq) returns (BulkProductResp) {}
+  // 创建商品
+  rpc CreateProduct(CreateProductReq) returns (Empty) {}
+  // 删除商品
+  rpc DeleteProduct(DeleteProductReq) returns (Empty) {}
+  // 更新商品
+  rpc UpdateProduct(UpdateProductReq) returns (Empty) {}
 }
 
-message Page {
+message Product {
+  // @inject_tag: json:"product_name" form:"product_name"
+  string ProductName = 1;
+  // @inject_tag: json:"desc" form:"desc"
+  string Desc = 2;
+  // @inject_tag: json:"price" form:"price"
+  float Price = 3;
+  // @inject_tag: json:"sku" form:"sku"
+  string Sku = 4;
+  // @inject_tag: json:"category_id" form:"category_id"
+  uint64 CategoryID = 5;
+  // @inject_tag: json:"stock_count" form:"stock_count"
+  int64  StockCount = 6;
+}
+
+message ProductPage {
   // @inject_tag: json:"page" form:"page"
   int64 Page = 1;
   // @inject_tag: json:"page_size" form:"page_size"
   int64 PageSize = 2;
-  // @inject_tag: json:"page_count" form:"page_size"
+  // @inject_tag: json:"page_count" form:"page_count"
   int64 PageCount = 3;
   // @inject_tag: json:"total" form:"total"
   int64 Total = 4;
 }
 
-message ProductResponse {
-
+message GetProductReq {
+  // @inject_tag: json:"text" form:"text"
+  string Text = 1;
+  ProductPage Page = 2;
 }
 
-message Product {
-  // @inject_tag: json:"name" form:"name"
-  string Name = 1;
+message BulkProductResp {
+  // @inject_tag: json:"resp" form:"resp"
+  repeated Product Resp = 1;
+}
+
+message CreateProductReq {
+  // @inject_tag: json:"product_name" form:"product_name"
+  string ProductName = 1;
   // @inject_tag: json:"desc" form:"desc"
   string Desc = 2;
   // @inject_tag: json:"price" form:"price"
   float Price = 3;
-  // @inject_tag: json:"count" form:"count"
-  int64 Count = 4;
   // @inject_tag: json:"category_id" form:"category_id"
   uint64 CategoryID = 5;
+  // @inject_tag: json:"stock_count" form:"stock_count"
+  int64  StockCount = 6;
 }
 
-message BulkProductResponse {
-  repeated Product ProductResp= 1;
+message UpdateProductReq {
+  // @inject_tag: json:"product_name" form:"product_name"
+  string ProductName = 1;
+  // @inject_tag: json:"desc" form:"desc"
+  string Desc = 2;
+  // @inject_tag: json:"price" form:"price"
+  float Price = 3;
+  // @inject_tag: json:"category_id" form:"category_id"
+  uint64 CategoryID = 5;
+  // @inject_tag: json:"stock_count" form:"stock_count"
+  int64  StockCount = 6;
+  // @inject_tag: json:"sku" form:"sku"
+  string SKU = 7;
+}
+
+message Empty {}
+
+message DeleteProductReq {
+  // @inject_tag: json:"sku" form:"sku"
+  string Sku = 1;
 }

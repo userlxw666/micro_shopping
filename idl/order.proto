@@ -1,0 +1,51 @@
+syntax="proto3";
+package pb;
+option go_package="./;pb";
+
+service OrderService {
+  rpc CompleteOrder(CompleteOrderRequest) returns (Empty) {}
+  rpc CancelOrder(CancelOrderRequest) returns (Empty) {}
+  rpc GetOrders(GetOrderRequest) returns (GetOrderResponse) {}
+}
+
+message CompleteOrderRequest {
+  // @inject_tag: json:"user_id" form:"user_id"
+  string UserID = 1;
+}
+
+message Empty {}
+
+message CancelOrderRequest {
+  // @inject_tag: json:"user_id" form:"user_id"
+  string UserID = 1;
+}
+
+message Page {
+  // @inject_tag: json:"page" form:"page"
+  int64 Page = 1;
+  // @inject_tag: json:"page_size" form:"page_size"
+  int64 PageSize = 2;
+  // @inject_tag: json:"page_count" form:"page_count"
+  int64 PageCount = 3;
+  // @inject_tag: json:"total" form:"total"
+  int64 Total = 4;
+}
+
+message GetOrderRequest {
+  Page Pages = 1;
+  // @inject_tag: json:"user_id" form:"user_id"
+  string  UserID = 2;
+}
+
+message OderItem {
+  // @inject_tag: json:"product_name" form:"product_name"
+  string ProductName = 1;
+  // @inject_tag: json:"user_id" form:"user_id"
+  string ProductID = 2;
+  // @inject_tag: json:"count" form:"count"
+  int64 Count = 3;
+}
+
+message GetOrderResponse {
+  repeated OderItem Items = 1;
+}
