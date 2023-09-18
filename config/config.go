@@ -9,6 +9,9 @@ type ConfigFile struct {
 	Mysql           Mysql
 	UserService     UserService
 	CategoryService CategoryService
+	ProductService  ProductService
+	CartService     CartService
+	OderService     OderService
 }
 
 type Mysql struct {
@@ -25,6 +28,21 @@ type UserService struct {
 }
 
 type CategoryService struct {
+	Host string
+	Port int
+}
+
+type ProductService struct {
+	Host string
+	Port int
+}
+
+type CartService struct {
+	Host string
+	Port int
+}
+
+type OderService struct {
 	Host string
 	Port int
 }

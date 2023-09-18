@@ -12,3 +12,15 @@ UserService:
 CategoryService:
   Host: 127.0.0.1
   Port: 50002
+
+ProductService:
+  Host: 127.0.0.1
+  Port: 50003
+
+CartService:
+  Host: 127.0.0.1
+  Port: 50004
+
+OderService:
+  Host: 127.0.0.1
+  Port: 50005
