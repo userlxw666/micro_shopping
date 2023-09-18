@@ -3,7 +3,7 @@ package utils
 import (
 	"errors"
 	"fmt"
-	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go"
 	"time"
 )
 
@@ -34,18 +34,17 @@ func CreateToken(username string, userid uint) (string, error) {
 	return tokenString, nil
 }
 
-func ParseToken(tokenString string, Secret string) (*MyClaims, error) {
+func ParseToken(tokenString string, Secret string) *MyClaims {
 	token, err := jwt.ParseWithClaims(tokenString, &MyClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(Secret), nil
 	})
 	if err != nil {
-		fmt.Println("parse token error:", err)
-		return nil, err
+		return nil
 	}
 	if myClaim, ok := token.Claims.(*MyClaims); ok && token.Valid {
-		return myClaim, err
+		return myClaim
 	} else {
 		fmt.Println("断言失败", errors.New("断言失败"))
-		return nil, errors.New("断言失败")
+		return nil
 	}
 }

@@ -13,7 +13,14 @@ var (
 	PageSizeVar     = "pageSize"
 )
 
-func New(page, pageSize, total int) *pb.Page {
+type Pages struct {
+	Page      int64
+	PageSize  int64
+	Total     int64
+	PageCount int64
+}
+
+func New(page, pageSize, total int) *Pages {
 	if pageSize < 0 {
 		pageSize = DefaultPageSize
 	}
@@ -31,7 +38,7 @@ func New(page, pageSize, total int) *pb.Page {
 		page = 1
 	}
 
-	return &pb.Page{
+	return &Pages{
 		Page:      int64(page),
 		PageSize:  int64(pageSize),
 		Total:     int64(total),
@@ -39,7 +46,7 @@ func New(page, pageSize, total int) *pb.Page {
 	}
 }
 
-func NewFromGinRequest(c *gin.Context, count int) *pb.Page {
+func NewFromGinRequest(c *gin.Context, count int) *Pages {
 	page := ParseInt(c.Query(PageVar), 1)
 	pageSize := ParseInt(c.Query(PageSizeVar), DefaultPageSize)
 	return New(page, pageSize, count)
@@ -53,4 +60,24 @@ func ParseInt(value string, defaultValue int) int {
 		return result
 	}
 	return defaultValue
+}
+
+// page转换categoryPage
+func NewCategoryPages(page *Pages) *pb.Page {
+	return &pb.Page{
+		Page:      page.Page,
+		PageSize:  page.PageSize,
+		PageCount: page.PageCount,
+		Total:     page.Total,
+	}
+}
+
+// page转换productPage
+func NewProductPages(page *Pages) *pb.ProductPage {
+	return &pb.ProductPage{
+		Page:      page.Page,
+		PageSize:  page.PageSize,
+		PageCount: page.PageCount,
+		Total:     page.Total,
+	}
 }
