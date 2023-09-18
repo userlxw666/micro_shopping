@@ -1,11 +1,11 @@
-package order
+package main
 
 import (
 	"fmt"
 	"github.com/hashicorp/consul/api"
 	"google.golang.org/grpc"
+	Orderdao "micro_shopping/app/order/dao"
 	"micro_shopping/app/order/server"
-	ProductDao "micro_shopping/app/product/dao"
 	"micro_shopping/config"
 	"micro_shopping/idl/pb"
 	"net"
@@ -14,7 +14,7 @@ import (
 
 func main() {
 	config.ReadConfig()
-	ProductDao.InitSQL()
+	Orderdao.InitSQL()
 	consulConfig := api.DefaultConfig()
 
 	consulClient, err_cli := api.NewClient(consulConfig)
@@ -24,10 +24,10 @@ func main() {
 	}
 
 	reg := api.AgentServiceRegistration{
-		Tags:    []string{"ProductService"},
-		Name:    "ProductService",
-		Address: config.RdConfigFile.ProductService.Host,
-		Port:    config.RdConfigFile.ProductService.Port,
+		Tags:    []string{"OrderService"},
+		Name:    "OrderService",
+		Address: config.RdConfigFile.OrderService.Host,
+		Port:    config.RdConfigFile.OrderService.Port,
 	}
 
 	err_reg := consulClient.Agent().ServiceRegister(&reg)
