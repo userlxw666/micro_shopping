@@ -11,7 +11,7 @@ type ConfigFile struct {
 	CategoryService CategoryService
 	ProductService  ProductService
 	CartService     CartService
-	OderService     OderService
+	OrderService    OrderService
 }
 
 type Mysql struct {
@@ -42,7 +42,7 @@ type CartService struct {
 	Port int
 }
 
-type OderService struct {
+type OrderService struct {
 	Host string
 	Port int
 }

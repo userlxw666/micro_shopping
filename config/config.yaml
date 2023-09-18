@@ -21,6 +21,6 @@ CartService:
   Host: 127.0.0.1
   Port: 50004
 
-OderService:
+OrderService:
   Host: 127.0.0.1
   Port: 50005
