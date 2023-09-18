@@ -27,26 +27,6 @@ func CreateCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func BulkCreateCategory(c *gin.Context) {
-	fileHeader, err := c.FormFile("file")
-	if err != nil {
-		api_helper.HandleError(c, err)
-		return
-	}
-	//read file
-	req, err := utils.ReadCsv(fileHeader)
-	if err != nil {
-		api_helper.HandleError(c, err)
-		return
-	}
-	// grpc 调用
-	resp, err := rpc.BulkCreateCategory(c, req)
-	if err != nil {
-		api_helper.HandleError(c, errors.New("category rpc 调用失败"))
-	}
-	c.JSON(http.StatusOK, resp.BulkResponse)
-}
-
 func GetCategories(c *gin.Context) {
 	page := utils.NewFromGinRequest(c, -1)
 	categoryPage := utils.NewCategoryPages(page)
