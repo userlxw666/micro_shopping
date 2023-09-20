@@ -32,8 +32,13 @@ func NewRouter() {
 	cartGroup.Use(middleware.MiddleJWT)
 	{
 		cartGroup.GET("/get", controller.GetCart)
-		cartGroup.POST("/create", controller.AddItem)
+		cartGroup.POST("/add", controller.AddItem)
 		cartGroup.POST("/update", controller.UpdateItem)
 	}
+	orderGroup := ginRouter.Group("/order")
+	orderGroup.Use(middleware.MiddleJWT)
+	orderGroup.GET("/complete", controller.CompleteOrder)
+	orderGroup.POST("/cancel", controller.CancelOrder)
+	orderGroup.POST("/get", controller.GetOrders)
 	ginRouter.Run()
 }

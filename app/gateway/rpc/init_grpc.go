@@ -27,6 +27,7 @@ var (
 	CategoryService pb.CategoryServiceClient
 	ProductService  pb.ProductServiceClient
 	CartService     pb.CartServiceClient
+	OrderService    pb.OrderServiceClient
 )
 
 func InitRPC() {
@@ -40,4 +41,5 @@ func InitRPC() {
 	CategoryService = pb.NewCategoryServiceClient(GetGrpcConn("CategoryService", "CategoryService", consulClient))
 	ProductService = pb.NewProductServiceClient(GetGrpcConn("ProductService", "ProductService", consulClient))
 	CartService = pb.NewCartServiceClient(GetGrpcConn("CartService", "CartService", consulClient))
+	OrderService = pb.NewOrderServiceClient(GetGrpcConn("OrderService", "OrderService", consulClient))
 }
