@@ -3,24 +3,26 @@ package pb;
 option go_package="./;pb";
 
 service OrderService {
-  rpc CompleteOrder(CompleteOrderRequest) returns (Empty) {}
-  rpc CancelOrder(CancelOrderRequest) returns (Empty) {}
+  rpc CompleteOrder(CompleteOrderRequest) returns (OrderEmpty) {}
+  rpc CancelOrder(CancelOrderRequest) returns (OrderEmpty) {}
   rpc GetOrders(GetOrderRequest) returns (GetOrderResponse) {}
 }
 
 message CompleteOrderRequest {
   // @inject_tag: json:"user_id" form:"user_id"
-  string UserID = 1;
+  uint64 UserID = 1;
 }
 
-message Empty {}
+message OrderEmpty {}
 
 message CancelOrderRequest {
   // @inject_tag: json:"user_id" form:"user_id"
-  string UserID = 1;
+  uint64 UserID = 1;
+  // @inject_tag: json:"order_id" form:"order_id"
+  uint64 OrderID = 2;
 }
 
-message Page {
+message OrderPage {
   // @inject_tag: json:"page" form:"page"
   int64 Page = 1;
   // @inject_tag: json:"page_size" form:"page_size"
@@ -32,16 +34,14 @@ message Page {
 }
 
 message GetOrderRequest {
-  Page Pages = 1;
+  OrderPage Pages = 1;
   // @inject_tag: json:"user_id" form:"user_id"
-  string  UserID = 2;
+  uint64  UserID = 2;
 }
 
 message OderItem {
-  // @inject_tag: json:"product_name" form:"product_name"
-  string ProductName = 1;
   // @inject_tag: json:"user_id" form:"user_id"
-  string ProductID = 2;
+  uint64 ProductID = 2;
   // @inject_tag: json:"count" form:"count"
   int64 Count = 3;
 }

@@ -28,8 +28,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OrderServiceClient interface {
-	CompleteOrder(ctx context.Context, in *CompleteOrderRequest, opts ...grpc.CallOption) (*Empty, error)
-	CancelOrder(ctx context.Context, in *CancelOrderRequest, opts ...grpc.CallOption) (*Empty, error)
+	CompleteOrder(ctx context.Context, in *CompleteOrderRequest, opts ...grpc.CallOption) (*OrderEmpty, error)
+	CancelOrder(ctx context.Context, in *CancelOrderRequest, opts ...grpc.CallOption) (*OrderEmpty, error)
 	GetOrders(ctx context.Context, in *GetOrderRequest, opts ...grpc.CallOption) (*GetOrderResponse, error)
 }
 
@@ -41,8 +41,8 @@ func NewOrderServiceClient(cc grpc.ClientConnInterface) OrderServiceClient {
 	return &orderServiceClient{cc}
 }
 
-func (c *orderServiceClient) CompleteOrder(ctx context.Context, in *CompleteOrderRequest, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *orderServiceClient) CompleteOrder(ctx context.Context, in *CompleteOrderRequest, opts ...grpc.CallOption) (*OrderEmpty, error) {
+	out := new(OrderEmpty)
 	err := c.cc.Invoke(ctx, OrderService_CompleteOrder_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -50,8 +50,8 @@ func (c *orderServiceClient) CompleteOrder(ctx context.Context, in *CompleteOrde
 	return out, nil
 }
 
-func (c *orderServiceClient) CancelOrder(ctx context.Context, in *CancelOrderRequest, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *orderServiceClient) CancelOrder(ctx context.Context, in *CancelOrderRequest, opts ...grpc.CallOption) (*OrderEmpty, error) {
+	out := new(OrderEmpty)
 	err := c.cc.Invoke(ctx, OrderService_CancelOrder_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -72,8 +72,8 @@ func (c *orderServiceClient) GetOrders(ctx context.Context, in *GetOrderRequest,
 // All implementations should embed UnimplementedOrderServiceServer
 // for forward compatibility
 type OrderServiceServer interface {
-	CompleteOrder(context.Context, *CompleteOrderRequest) (*Empty, error)
-	CancelOrder(context.Context, *CancelOrderRequest) (*Empty, error)
+	CompleteOrder(context.Context, *CompleteOrderRequest) (*OrderEmpty, error)
+	CancelOrder(context.Context, *CancelOrderRequest) (*OrderEmpty, error)
 	GetOrders(context.Context, *GetOrderRequest) (*GetOrderResponse, error)
 }
 
@@ -81,10 +81,10 @@ type OrderServiceServer interface {
 type UnimplementedOrderServiceServer struct {
 }
 
-func (UnimplementedOrderServiceServer) CompleteOrder(context.Context, *CompleteOrderRequest) (*Empty, error) {
+func (UnimplementedOrderServiceServer) CompleteOrder(context.Context, *CompleteOrderRequest) (*OrderEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CompleteOrder not implemented")
 }
-func (UnimplementedOrderServiceServer) CancelOrder(context.Context, *CancelOrderRequest) (*Empty, error) {
+func (UnimplementedOrderServiceServer) CancelOrder(context.Context, *CancelOrderRequest) (*OrderEmpty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelOrder not implemented")
 }
 func (UnimplementedOrderServiceServer) GetOrders(context.Context, *GetOrderRequest) (*GetOrderResponse, error) {
