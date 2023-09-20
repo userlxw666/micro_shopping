@@ -40,7 +40,7 @@ func (dao *CartDao) UpDateCart(cart *model.Cart) error {
 // 根据用户id查找或创建购物车
 func (dao *CartDao) CreateOrGetCartByID(userId uint) (*model.Cart, error) {
 	var cart *model.Cart
-	err := dao.Where(&model.Cart{UserID: userId}).Attrs(model.NewCart(userId)).FirstOrCreate(&cart).Error
+	err := dao.Where(model.Cart{UserID: userId}).Attrs(model.NewCart(userId)).FirstOrCreate(&cart).Error
 	return cart, err
 }
 

@@ -41,23 +41,17 @@ func (cs *CartService) AddItem(ctx context.Context, req *pb.AddItemRequest) (res
 			fmt.Println("creat cartitem error", err)
 			return nil, err
 		}
+		currentItem, _ = CtItDao.GetCartItemById(currentProduct.ID, currentCart.ID)
+		return resp, err
 	}
 
 	if currentProduct.StockCount-currentItem.Count < int(req.Count) {
-		return resp, errors.New("库存不够")
+		return nil, errors.New("库存不够")
 	}
 
 	// 更新所添加的数量
 	currentItem.Count += int(req.Count)
 	err = CtItDao.UpdateCartItem(currentItem)
-	if err == nil {
-		currentProduct.StockCount -= int(req.Count)
-		err = PtDao.UpdateProduct(currentProduct)
-		if err != nil {
-			fmt.Println("商品数量更新失败", err)
-			return resp, err
-		}
-	}
 	return resp, err
 }
 
@@ -84,15 +78,6 @@ func (cs *CartService) UpdateItem(ctx context.Context, req *pb.UpdateItemRequest
 	}
 	currentItem.Count = int(req.Count)
 	err = CtItDao.UpdateCartItem(currentItem)
-	if err == nil {
-		currentProduct.StockCount += currentItem.Count
-		currentProduct.StockCount -= int(req.Count)
-		err = PtDao.UpdateProduct(currentProduct)
-		if err != nil {
-			fmt.Println("商品数量更新失败", err)
-			return nil, err
-		}
-	}
 	return resp, nil
 }
 

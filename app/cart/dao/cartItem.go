@@ -38,7 +38,7 @@ func (dao *CartItemDao) UpdateCartItem(cartItem *model.CartItem) error {
 // 通过productID和cartID获取cartItem
 func (dao *CartItemDao) GetCartItemById(productId, cartId uint) (*model.CartItem, error) {
 	var item *model.CartItem
-	err := dao.Where(&model.CartItem{ProductID: productId, CartID: cartId}).First(&item).Error
+	err := dao.Where(model.CartItem{ProductID: productId, CartID: cartId}).First(&item).Error
 	if err != nil {
 		return nil, err
 	}
@@ -48,6 +48,6 @@ func (dao *CartItemDao) GetCartItemById(productId, cartId uint) (*model.CartItem
 // 获取购物车中的所有商品
 func (dao *CartItemDao) GetAllCartItem(cartId uint) ([]*model.CartItem, error) {
 	var items []*model.CartItem
-	err := dao.Where(&model.CartItem{CartID: cartId}).Find(&items).Error
+	err := dao.Where(model.CartItem{CartID: cartId}).Find(&items).Error
 	return items, err
 }
