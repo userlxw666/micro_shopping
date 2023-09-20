@@ -29,8 +29,8 @@ func InitSQL() {
 	}
 	DB = db
 	fmt.Println("数据库连接成功！")
-	MigrationOrder()
 	MigrationOrderItem()
+	MigrationOrder()
 }
 
 func NewSQLClient(ctx context.Context) *gorm.DB {

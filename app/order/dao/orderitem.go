@@ -1,7 +1,6 @@
 package Orderdao
 
 import (
-	"context"
 	"gorm.io/gorm"
 	"micro_shopping/app/order/dao/model"
 )
@@ -10,16 +9,16 @@ type OrderItemDao struct {
 	*gorm.DB
 }
 
-func NewOrderItemDao(ctx context.Context) *OrderItemDao {
-	if ctx == nil {
-		ctx = context.Background()
-	}
-	return &OrderItemDao{NewSQLClient(ctx)}
-}
+//func NewOrderItemDao(ctx context.Context) *OrderItemDao {
+//	if ctx == nil {
+//		ctx = context.Background()
+//	}
+//	return &OrderItemDao{NewSQLClient(ctx)}
+//}
 
 // 创建订单项目
 func (dao *OrderItemDao) CreateOrderItem(item *model.OrderItem) error {
-	err := dao.Model(&model.OrderItem{}).Create(*item).Error
+	err := dao.Model(&model.OrderItem{}).Create(&item).Error
 	return err
 }
 

@@ -41,7 +41,7 @@ func main() {
 	pb.RegisterOrderServiceServer(grpcService, new(server.OrderService))
 
 	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%s", config.RdConfigFile.ProductService.Host,
-		strconv.Itoa(config.RdConfigFile.ProductService.Port)))
+		strconv.Itoa(config.RdConfigFile.OrderService.Port)))
 	if err != nil {
 		fmt.Println("listen error", err)
 		return

@@ -3,6 +3,7 @@ package Orderdao
 import (
 	"context"
 	"gorm.io/gorm"
+	Cartdao "micro_shopping/app/cart/dao"
 	"micro_shopping/app/order/dao/model"
 )
 
@@ -17,35 +18,49 @@ func NewOrderDao(ctx context.Context) *OrderDao {
 	return &OrderDao{NewSQLClient(ctx)}
 }
 
+func NewCartDao(ctx context.Context) *Cartdao.CartDao {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	return &Cartdao.CartDao{NewSQLClient(ctx)}
+}
+
+func NewCartItemDao(ctx context.Context) *Cartdao.CartItemDao {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	return &Cartdao.CartItemDao{NewSQLClient(ctx)}
+}
+
 // 创建订单
-func (dao *OrderDao) CreateOrder(order *model.Order) error {
-	err := dao.Model(&model.Order{}).Create(*order).Error
+func (dao *OrderDao) CreateOrder(order *model.Orders) error {
+	err := dao.Model(&model.Orders{}).Create(&order).Error
 	return err
 }
 
 // 根据订单id查找订单
-func (dao *OrderDao) GetOrderByID(oid uint) (*model.Order, error) {
-	var order *model.Order
-	err := dao.Where("ID=?", oid).Where("IsCanceled=?", false).First(&order).Error
+func (dao *OrderDao) GetOrderByID(oid uint) (*model.Orders, error) {
+	var order *model.Orders
+	err := dao.Where("id=?", oid).Where("is_cancel=?", false).First(&order).Error
 	return order, err
 }
 
 // 查找所有订单
-func (dao *OrderDao) GetAllOrder(pageIndex, pageSize int, uid uint) ([]model.Order, error) {
-	var orders []model.Order
+func (dao *OrderDao) GetAllOrder(pageIndex, pageSize int, uid uint) ([]model.Orders, error) {
+	var orders []model.Orders
 
-	err := dao.Where("IsCanceled=?", false).Where("UserID=?", uid).Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&orders).Error
+	err := dao.Where("is_cancel=?", false).Where("user_id=?", uid).Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&orders).Error
 	for k, order := range orders {
-		dao.Where("OrderID=?", order.ID).Find(orders[k].OrderItem)
+		dao.Where("order_id=?", order.ID).Find(&orders[k].OrderItem)
 		for i, product := range orders[k].OrderItem {
-			dao.Where("ID=?", product.ID).First(orders[k].OrderItem[i].Product)
+			dao.Where("id=?", product.ID).First(&orders[k].OrderItem[i].Product)
 		}
 	}
 	return orders, err
 }
 
 // 更新订单
-func (dao *OrderDao) UpdateOrder(order *model.Order) error {
-	err := dao.Model(&model.Order{}).Save(&order).Error
+func (dao *OrderDao) UpdateOrder(order *model.Orders) error {
+	err := dao.Save(&order).Error
 	return err
 }

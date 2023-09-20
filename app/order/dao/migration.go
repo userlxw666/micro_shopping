@@ -14,7 +14,7 @@ func MigrationOrderItem() {
 }
 
 func MigrationOrder() {
-	err := DB.AutoMigrate(&model.Order{})
+	err := DB.AutoMigrate(&model.Orders{})
 	if err != nil {
 		fmt.Println("create order table error", err)
 		return
