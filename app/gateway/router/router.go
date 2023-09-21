@@ -25,20 +25,20 @@ func NewRouter() {
 	{
 		productGroup.POST("/create", controller.CreateProduct)
 		productGroup.GET("/get", controller.GetProducts)
-		productGroup.POST("/update", controller.UpdateProduct)
-		productGroup.POST("/delete", controller.DeleteProduct)
+		productGroup.PUT("/update", controller.UpdateProduct)
+		productGroup.DELETE("/delete", controller.DeleteProduct)
 	}
 	cartGroup := ginRouter.Group("/cart")
 	cartGroup.Use(middleware.MiddleJWT)
 	{
 		cartGroup.GET("/get", controller.GetCart)
 		cartGroup.POST("/add", controller.AddItem)
-		cartGroup.POST("/update", controller.UpdateItem)
+		cartGroup.PUT("/update", controller.UpdateItem)
 	}
 	orderGroup := ginRouter.Group("/order")
 	orderGroup.Use(middleware.MiddleJWT)
-	orderGroup.GET("/complete", controller.CompleteOrder)
+	orderGroup.POST("/complete", controller.CompleteOrder)
 	orderGroup.POST("/cancel", controller.CancelOrder)
-	orderGroup.POST("/get", controller.GetOrders)
+	orderGroup.GET("/get", controller.GetOrders)
 	ginRouter.Run()
 }
