@@ -8,18 +8,20 @@ import (
 
 type OrderItem struct {
 	gorm.Model
-	Product    model.Product `gorm:"foreignKey:ProductID"`
-	ProductID  uint
-	Count      int
-	OrderID    uint
-	IsCanceled bool
+	Product      model.Product `gorm:"foreignKey:ProductID"`
+	ProductID    uint
+	Count        int
+	ProductPrice float32
+	OrderID      uint
+	IsCanceled   bool
 }
 
-func NewOrderItem(productId uint, count int) *OrderItem {
+func NewOrderItem(productId uint, count int, ProductPrice float32) *OrderItem {
 	return &OrderItem{
-		ProductID:  productId,
-		Count:      count,
-		IsCanceled: false,
+		ProductID:    productId,
+		Count:        count,
+		ProductPrice: ProductPrice,
+		IsCanceled:   false,
 	}
 }
 

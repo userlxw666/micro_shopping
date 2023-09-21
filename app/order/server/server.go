@@ -32,7 +32,7 @@ func (os *OrderService) CompleteOrder(ctx context.Context, req *pb.CompleteOrder
 	}
 	orderitems := make([]model.OrderItem, 0)
 	for _, item := range cartItems {
-		orderitems = append(orderitems, *model.NewOrderItem(item.ProductID, item.Count))
+		orderitems = append(orderitems, *model.NewOrderItem(item.ProductID, item.Count, item.Product.Price))
 	}
 	err = odDao.CreateOrder(model.NewOrder(uint(req.UserID), orderitems))
 	if err != nil {
@@ -60,6 +60,7 @@ func (os *OrderService) CancelOrder(ctx context.Context, req *pb.CancelOrderRequ
 	}
 	return resp, nil
 }
+
 func (os *OrderService) GetOrders(ctx context.Context, req *pb.GetOrderRequest) (resp *pb.GetOrderResponse, err error) {
 	odDao := Orderdao.NewOrderDao(ctx)
 	orderitems, err := odDao.GetAllOrder(int(req.Pages.Page), int(req.Pages.PageSize), uint(req.UserID))

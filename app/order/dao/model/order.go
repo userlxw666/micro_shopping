@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"gorm.io/gorm"
 	"micro_shopping/app/cart/dao/model"
 	ProductModel "micro_shopping/app/product/dao/model"
@@ -17,9 +18,10 @@ type Orders struct {
 }
 
 func NewOrder(userid uint, items []OrderItem) *Orders {
-	var total float32 = 0
+	var total float32 = 0.0
 	for _, item := range items {
-		total = item.Product.Price * float32(item.Count)
+		total += item.ProductPrice * float32(item.Count)
+		fmt.Println(item.Product.Price, float32(item.Count))
 	}
 	return &Orders{
 		UserID:     userid,
