@@ -48,6 +48,15 @@ func (dao *CartItemDao) GetCartItemById(productId, cartId uint) (*model.CartItem
 // 获取购物车中的所有商品
 func (dao *CartItemDao) GetAllCartItem(cartId uint) ([]*model.CartItem, error) {
 	var items []*model.CartItem
-	err := dao.Where(model.CartItem{CartID: cartId}).Find(&items).Error
-	return items, err
+	err := dao.Where(&model.CartItem{CartID: cartId}).Find(&items).Error
+	if err != nil {
+		return nil, err
+	}
+	for i, item := range items {
+		err = dao.Model(item).Association("Product").Find(&items[i].Product)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return items, nil
 }
